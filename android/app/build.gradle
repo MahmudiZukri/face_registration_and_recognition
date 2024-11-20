@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.example.face_registration_and_recognition"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -32,8 +32,17 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    aaptOptions {
+        noCompress "tflite"
+        noCompress "lite"
+    }
+
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+        lintOptions {
+        disable 'InvalidPackage'
     }
 
     sourceSets {
@@ -45,7 +54,7 @@ android {
         applicationId "com.example.face_registration_and_recognition"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
