@@ -84,6 +84,9 @@ class RegistrationPageState extends State<RegistrationPage> {
         _bottomSheetVisible = true;
         pictureTaken = true;
       });
+      _mlService.addMoreFaces(
+        predictedData: _mlService.predictedData,
+      );
 
       return true;
     }
@@ -202,7 +205,10 @@ class RegistrationPageState extends State<RegistrationPage> {
           body,
           CameraHeader(
             "REGISTRATION",
-            onBackPressed: _onBackPressed,
+            onBackPressed: () {
+              _onBackPressed();
+              _mlService.clearPredictedDatas();
+            },
           )
         ],
       ),

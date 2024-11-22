@@ -15,7 +15,10 @@ class MLService {
   double threshold = 0.5;
 
   List _predictedData = [];
+  List<List> _predictedDatas = [];
+
   List get predictedData => _predictedData;
+  List<List> get predictedDatas => _predictedDatas;
 
   Future initialize() async {
     late Delegate delegate;
@@ -116,10 +119,14 @@ class MLService {
     debugPrint('users.length=> ${users.length}');
 
     for (User u in users) {
-      currDist = _euclideanDistance(u.modelData, predictedData);
-      if (currDist <= threshold && currDist < minDist) {
-        minDist = currDist;
-        predictedResult = u;
+      // Check each model data list in the user's modelData
+
+      for (List modelData in u.modelData) {
+        currDist = _euclideanDistance(modelData, predictedData);
+        if (currDist <= threshold && currDist < minDist) {
+          minDist = currDist;
+          predictedResult = u;
+        }
       }
     }
     return predictedResult;
@@ -135,8 +142,18 @@ class MLService {
     return sqrt(sum);
   }
 
+  void addMoreFaces({required List predictedData}) {
+    predictedDatas.add(predictedData);
+
+    setPredictedData([]);
+  }
+
   void setPredictedData(value) {
     _predictedData = value;
+  }
+
+  void clearPredictedDatas() {
+    _predictedDatas = [];
   }
 
   dispose() {}

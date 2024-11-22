@@ -2,6 +2,7 @@
 
 import 'package:face_registration_and_recognition/database_helper.dart';
 import 'package:face_registration_and_recognition/locator.dart';
+import 'package:face_registration_and_recognition/models/user.dart';
 import 'package:face_registration_and_recognition/pages/registration_page.dart';
 import 'package:face_registration_and_recognition/pages/sign_in_page.dart';
 import 'package:face_registration_and_recognition/services/camera.service.dart';
@@ -21,6 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final FaceDetectorService _mlKitService = locator<FaceDetectorService>();
   final CameraService _cameraService = locator<CameraService>();
   bool loading = false;
+  List<User> users = [];
 
   @override
   void initState() {
@@ -29,11 +31,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _initializeServices() async {
+    DatabaseHelper dbHelper = DatabaseHelper.instance;
+
     setState(() => loading = true);
     await _cameraService.initialize();
     await _mlService.initialize();
     _mlKitService.initialize();
     setState(() => loading = false);
+    users = await dbHelper.queryAllUsers();
   }
 
   @override

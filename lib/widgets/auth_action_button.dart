@@ -42,13 +42,14 @@ class _AuthActionButtonState extends State<AuthActionButton> {
 
   Future _signUp(context) async {
     DatabaseHelper databaseHelper = DatabaseHelper.instance;
-    List predictedData = _mlService.predictedData;
+    List<List> predictedDatas = _mlService.predictedDatas;
+
     String user = _userTextEditingController.text;
     String password = _passwordTextEditingController.text;
     User userToSave = User(
       user: user,
       password: password,
-      modelData: predictedData,
+      modelData: predictedDatas,
     );
     await databaseHelper.insert(userToSave);
     _mlService.setPredictedData([]);
@@ -182,6 +183,8 @@ class _AuthActionButtonState extends State<AuthActionButton> {
                     ),
               const SizedBox(height: 10),
               const Divider(),
+              const SizedBox(height: 8),
+              Text(' Current Faces : ${_mlService.predictedDatas.length}'),
               const SizedBox(height: 10),
               widget.isLogin && predictedUser != null
                   ? AppButton(
@@ -195,15 +198,34 @@ class _AuthActionButtonState extends State<AuthActionButton> {
                       ),
                     )
                   : !widget.isLogin
-                      ? AppButton(
-                          text: 'REGISTER',
-                          onPressed: () async {
-                            await _signUp(context);
-                          },
-                          icon: const Icon(
-                            Icons.person_add,
-                            color: Colors.white,
-                          ),
+                      ? Row(
+                          children: [
+                            Expanded(
+                              child: AppButton(
+                                text: 'ADD MORE FACES',
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(
+                                  Icons.face,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 14.0),
+                            Expanded(
+                              child: AppButton(
+                                text: 'REGISTER',
+                                onPressed: () async {
+                                  await _signUp(context);
+                                },
+                                icon: const Icon(
+                                  Icons.person_add,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         )
                       : Container(),
             ],

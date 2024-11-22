@@ -3,7 +3,7 @@ import 'dart:convert';
 class User {
   String user;
   String password;
-  List modelData;
+  List<List<dynamic>> modelData;
 
   User({
     required this.user,
@@ -12,10 +12,12 @@ class User {
   });
 
   static User fromMap(Map<String, dynamic> user) {
+    final decodedData = jsonDecode(user['model_data']) as List<dynamic>;
+    final modelData = decodedData.map((item) => item as List<dynamic>).toList();
     return User(
       user: user['user'],
       password: user['password'],
-      modelData: jsonDecode(user['model_data']),
+      modelData: modelData,
     );
   }
 

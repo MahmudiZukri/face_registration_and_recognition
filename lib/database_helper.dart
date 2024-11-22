@@ -50,7 +50,9 @@ class DatabaseHelper {
   Future<List<User>> queryAllUsers() async {
     Database db = await instance.database;
     List<Map<String, dynamic>> users = await db.query(table);
-    return users.map((u) => User.fromMap(u)).toList();
+    return users.map((u) {
+      return User.fromMap(u);
+    }).toList();
   }
 
   Future<int> deleteAll() async {
